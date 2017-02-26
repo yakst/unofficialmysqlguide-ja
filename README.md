@@ -1,1 +1,0 @@
-# unofficialmysqlguide-ja

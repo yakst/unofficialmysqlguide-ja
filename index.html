@@ -1,0 +1,22 @@
+---
+layout: top
+permalink: /
+---
+<div>
+  このページはMorgan Tocker氏の<a href="http://www.unofficialmysqlguide.com/">The Unofficial MySQL 8.0 Optimizer Guide</a>をユーザーが翻訳したものです。
+</div>
+<div class="posts">
+  <h3>記事一覧</h3>
+
+  <ul class="entry-list">
+    {% for post in site.posts %}
+    <li>
+    <div class="entry-head">
+      <span class="entry-label">{{ post.date | date: "%Y/%m/%d" }}&nbsp;&raquo;&nbsp;</span>
+      <span class="entry-title"><a href="{{ post.url }}">{{ post.title }}</a></span>
+    </div>
+    <div class="entry-digest">{{ post.content | strip_html | strip_newlines | truncatewords: 10 }}</div>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
