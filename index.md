@@ -1,4 +1,4 @@
-# 非公式MySQL 8.0オプティマイザーガイド 日本語版
+# 非公式MySQL 8.0オプティマイザガイド 日本語版
 
 [The Unofficial MySQL 8.0 Optimizer Guide](http://www.unofficialmysqlguide.com/)の日本語訳です。
 
@@ -16,7 +16,7 @@ Twitterアカウントは[@morgo](https://twitter.com/morgo)です。
 
 ## 謝辞
 
-- サーバーアーキテクチャー、コストモデル、クエリーオプティマイザーの図を提供してくれたMySQLオプティマイザーチームに感謝します。
+- サーバーアーキテクチャー、コストモデル、クエリーオプティマイザの図を提供してくれたMySQLオプティマイザチームに感謝します。
 - 編集してくれたChrissy Cuttingに感謝します。
 
 ## 重要事項
