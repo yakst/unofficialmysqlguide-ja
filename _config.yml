@@ -1,0 +1,4 @@
+theme: jekyll-theme-minimal
+title: 非公式MySQL 8.0オプティマイザーガイド
+permalink: :slug.html
+baseurl: /unofficialmysqlguide-ja
