@@ -32,7 +32,7 @@
           </ul>
         {% endif %}
         <ol>
-        {% assign sorted_posts = site.posts | sort: 'date' %}
+        {% assign sorted_posts = site.posts | sort: 'article_index' %}
         {% for post in sorted_posts %}
            <li><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
         {% endfor %}
