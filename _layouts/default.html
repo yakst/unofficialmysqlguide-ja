@@ -32,18 +32,15 @@
           </ul>
         {% endif %}
         <ol>
-        {% assign sorted_posts = site.posts | sort: 'article_index' %}
+        {% assign sorted_posts = site.posts | sort: 'date' %}
         {% for post in sorted_posts %}
            <li><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
         {% endfor %}
       </ol>
       </header>
       <section>
-        {% include post_header.html %}
-        <hr />
-        <br />
 
-        {{ content }}
+      {{ content }}
 
       </section>
       <footer>
