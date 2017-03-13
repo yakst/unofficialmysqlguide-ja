@@ -14,7 +14,7 @@
   <body>
     <div class="wrapper">
       <header>
-        <h1><a href="{{ site.baseurl }}">{{ site.title | default: site.github.repository_name }}</a></h1>
+        <h1><a href="{{ site.baseurl }}/">{{ site.title | default: site.github.repository_name }}</a></h1>
 
         {% if site.github.is_project_page %}
           <p class="view"><a href="{{ site.github.repository_url }}">View the Project on GitHub <small>{{ github_name }}</small></a></p>
@@ -32,15 +32,18 @@
           </ul>
         {% endif %}
         <ol>
-        {% assign sorted_posts = site.posts | sort: 'date' %}
+        {% assign sorted_posts = site.posts | sort: 'article_index' %}
         {% for post in sorted_posts %}
            <li><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
         {% endfor %}
       </ol>
       </header>
       <section>
+        {% include post_header.html %}
+        <hr />
+        <br />
 
-      {{ content }}
+        {{ content }}
 
       </section>
       <footer>
