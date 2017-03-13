@@ -1,9 +1,10 @@
 ---
 title: オプティマイザ トレース 
 date: 2017-03-09 00:00:01 -0900
+article_index: 5
+original_url: http://www.unofficialmysqlguide.com/optimizer-trace.html
+translator: taka-h (@takaidohigasi)
 ---
-
-# オプティマイザ トレース
 
 `EXPLAIN`はクエリーの実行計画以外は表示しません。すなわち、なぜ他の代替となる実行戦略が選ばれなかったのか、については表示しません。これを理解するためには次の観点を考える必要がありややこしいものです。
 
