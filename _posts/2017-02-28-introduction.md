@@ -1,9 +1,10 @@
 ---
 title: はじめに
 date: 2017-02-28 00:00:01 -0900
+article_index: 1
+original_url: http://www.unofficialmysqlguide.com/introduction.html
+translator: taka-h (@takaidohigasi)
 ---
-
-# はじめに
 
 ![オプティマイザーの概要](http://www.unofficialmysqlguide.com/_images/optimizer-overview.png)
 
