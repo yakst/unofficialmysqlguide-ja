@@ -1,9 +1,10 @@
 ---
 title: 論理変換
 date: 2017-03-10 00:00:01 -0900
+article_index: 6
+original_url: http://www.unofficialmysqlguide.com/logical-transformations.html
+translator: taka-h (@takaidohigasi)
 ---
-
-# 論理変換
 
 MySQLのオプティマイザは実行結果に影響を与えないように、クエリーを変換することがあります。余分な操作を取り除き、クエリーをより速く実行できるようクエリーを書き換えることがこの「変換」のゴールです。例えば、次のクエリーについて考えてみましょう。
 
