@@ -1,5 +1,5 @@
 ---
-title: 非公式MySQL 8.0オプティマイザーガイド 日本語版
+title: 非公式MySQL 8.0オプティマイザガイド 日本語版
 original_url: http://www.unofficialmysqlguide.com/
 translator: doublemarket (@dblmkt)
 ---
