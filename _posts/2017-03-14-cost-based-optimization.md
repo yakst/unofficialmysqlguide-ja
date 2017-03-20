@@ -44,9 +44,70 @@ translator: taka-h (@takaidohigasi)
 
 ハードウェアが進化したため、全ての構成要素でコストは一定とはみなせません(たとえばストレージのレイテンシーはSSDの出現と共に改善しました)。同様に、ソフトウェアもハードウェアの変化に対してとりくんでいるため(例えば、圧縮のような機能により)、リソース利用量も変化しうるでしょう。コンフィグ可能なコスト係数があれば、このようなケースに対して改善できます。
 
-{% include warning.html warn="コスト係数を修正すると多くのクエリーの計画は「悪くなる」可能性があることにご注意ください！ほとんどのプロダクション環境ではクエリーヒントを追加するのがよいでしょう。" %}
+例4は`row_evaluate_cost`を5倍にしたため、テーブルスキャンのコストが(インデックスを利用することによってかかる余分なコストと比べて)とても大きくなっていることを示しています。これによってオプティマイザは例2で作成した`p(population)`インデックスを選択しています。
 
-{% include warning.html warn="次のエグザンプルに進む前に忘れずにコストを初期化するようにしてください。<br /><br />UPDATE mysql.server_cost SET cost_value=NULL WHERE cost_name='row_evaluate_cost';<br />
+### 例4: 行あたりの見積もりが増えることでテーブルスキャンが高コストになる
+
+```sql
+# コストは0.2から1.0に増える
+UPDATE mysql.server_cost SET cost_value=1 WHERE cost_name='row_evaluate_cost';
+FLUSH OPTIMIZER_COSTS;
+
+# 新規セッションにて
+EXPLAIN FORMAT=JSON
+SELECT * FROM Country WHERE continent='Asia' and population > 5000000;
+{
+   "select_id": 1,
+   "cost_info": {          # 行あたりの見積もりが5倍になったため
+   "query_cost": "325.01"  # クエリーに対する合計コストが
+   },                      # 増加します
+   "table": {
+   "table_name": "Country",
+   "access_type": "range", # rangeアクセスで実行されます
+   "possible_keys": [
+      "p"
+   ],
+   "key": "p",
+   "used_key_parts": [
+      "Population"
+   ],
+   "key_length": "4",
+   "rows_examined_per_scan": 108,
+   "rows_produced_per_join": 15,
+   "filtered": "14.29",
+   "index_condition": "(`world`.`Country`.`Population` > 5000000)",
+   "cost_info": {
+      "read_cost": "309.58",
+      "eval_cost": "15.43",
+      "prefix_cost": "325.01",
+      "data_read_per_join": "3K"
+   },
+   "used_columns": [
+      "Code",
+      "Name",
+      "Continent",
+      "Region",
+      "SurfaceArea",
+      "IndepYear",
+      "Population",
+      "LifeExpectancy",
+      "GNP",
+      "GNPOld",
+      "LocalName",
+      "GovernmentForm",
+      "HeadOfState",
+      "Capital",
+      "Code2"
+   ],
+   "attached_condition": "(`world`.`Country`.`Continent` = 'Asia')"
+   }
+  }
+}
+```
+
+{% include warning.html warn="コスト係数を修正すると多くのクエリーの計画は「悪くなる」可能性があることにご注意ください！ほとんどの本番環境ではクエリーヒントを追加するのがよいでしょう。" %}
+
+{% include warning.html warn="次の例に進む前に忘れずにコストを初期化するようにしてください。<br /><br />UPDATE mysql.server_cost SET cost_value=NULL WHERE cost_name='row_evaluate_cost';<br />
 FLUSH OPTIMIZER_COSTS;# セッションを閉じる" %}
 
 ## メタデータと統計
