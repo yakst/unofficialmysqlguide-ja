@@ -6,16 +6,16 @@ original_url: http://www.unofficialmysqlguide.com/comparing-plans.html
 translator: taka-h (@takaidohigasi)
 ---
 
-簡単な復習: オプティマイザの役割はたくさんの選択肢の中から最良の実行計画を選択することです。これらの選択には、それぞれいくつかの異なるインデックスや、アクセス方法があります。ここまで、われわれは`p(population)`に対する2つの実行計画を見てきました。
+簡単な復習: オプティマイザの役割はたくさんの選択肢の中から最良の実行計画を選択することです。これらの選択肢には、それぞれいくつかの異なるインデックスや、アクセス方法があります。ここまで、われわれは`p(population)`に対する2つの実行計画を見てきました。
 
 1.  `p(population)`に対するレンジスキャン
 2. テーブルスキャン
 
-`p(population)`インデックスは良い方法ではないことがわかったため、`c(continent)`に対して新しいインデックスを追加しようと思います。一般的な本番環境では、`p(population)`インデックスは意味を持たなくなるため削除したくなることでしょう。しかし、オプティマイザが複数の選択肢をうまく評価できたことを確認するためにこれを残すこととします。
+`p(population)`インデックスは選択性が高くないことがわかったため、`c(continent)`に対して新しいインデックスを追加しようと思います。一般的な本番環境では、`p(population)`インデックスは意味を持たなくなるため削除したくなることでしょう。しかし、オプティマイザが複数の選択肢をうまく評価できたことを確認するためにこれを残すこととします。
 
 ![explain-c.png](http://www.unofficialmysqlguide.com/_images/explain-c.png)
 
-### 例7) 大陸(continent)にインデックスを追加する
+### 例7) continent(大陸)にインデックスを追加する
 
 ```sql
 ALTER TABLE Country ADD INDEX c (continent);
@@ -74,9 +74,9 @@ SELECT * FROM Country WHERE population > 5000000 continent='Asia';
 }
 ```
 
-例7では、`c(continent)`インデックスが`p(population)`インデックスおよびテーブルスキャンよりも優先されていることがわかります。インデックスを利用して実行するため、実作業量が少なくなる必要があります。オプティマイザはインデックスが利用されたあとに、51行(`rows_examined_per_scan`)のみを検査すれば良いと見積もってます。Asiaの大陸(continent)には国(country)の数が少ないので、インデックスを利用するのが良いと判断された、とも解釈できます。
+例7では、`c(continent)`インデックスが`p(population)`インデックスおよびテーブルスキャンよりも優先されていることがわかります。これでジョブはインデックスを利用しますが、これは作業量を減らすためです。オプティマイザはインデックスが利用されたあとに、51行(`rows_examined_per_scan`)のみを検査すれば良いと見積もってます。Asiaの大陸(continent)には国(country)の数が少ないので、インデックスを利用する方が選択性が高くて良いと判断された、とも解釈できます。
 
-例8ではクエリーを少し修正し、クエリーの選択条件を >500万 から >5億 に変更することで、`p(population)`インデックスを選択するように変わったことがわかります。これは理にかなっており、人口(population) > 5億の国は2つしかないため、よりインデックスが良い選択になるわけです。
+例8ではクエリーを少し修正し、クエリーの選択条件を >500万 から >5億 に変更することで、`p(population)`インデックスを選択するように変わったことがわかります。これは理にかなっており、人口(population) > 5億の国は2つしかないため、さらにインデックスの選択性が高くなるわけです。
 
 ![explain-example-8.png](http://www.unofficialmysqlguide.com/_images/explain-example-8.png)
 
@@ -145,9 +145,9 @@ continentへインデックスを追加することで、少なくとも4つも�
 
 これらのプランに加え、インデックスマージを使って、`p(population)`と`c(continent)`を両方を使うこともできます。例9の`OPTIMIZER_TRACE`で、`PRIMARY`へのレンジスキャンも検討されてたものの、採用されなかったことがわかります。
 
-`rows_examined_per_scan`がインデックスの選択度を示していることを説明しましたが、例7と例8の違いを説明するのために有用な2つの他の統計があります。
+`rows_examined_per_scan`がインデックスの選択性を示していることを説明しましたが、例7と例8の違いを説明するのために有用な2つの他の統計があります。
 
-1. **Key_length** continentのデータ型は、populationのそれが4バイトであるのに対し、1バイトのenumです。選択度が同じ場合、キー長が短いほうがページ内に多くのキーを格納できるため有利であり、インデックスとしてもメモリーがうまく使えます。
+1. **Key_length** continentのデータ型は、populationのそれが4バイトであるのに対し、1バイトのenumです。選択性が同じ場合、キー長が短いほうがページ内に多くのキーを格納できるため有利であり、インデックスとしてもメモリーがうまく使えます。
 2. **Access_type** すべての条件が同一であれば、ref によるアクセスは range によるアクセスより低コストです。
 
 ### 例9 人口が多い場合にインデックスpとcを比較したオプティマイザ トレース
@@ -293,7 +293,7 @@ SELECT * FROM information_schema.optimizer_trace;
                   "chosen_range_access_summary": {
                     "range_access_plan": {
                       "type": "range_scan",          # レンジオプティマイザは
-                      "index": "p",                  # ｐへのrangeアクセスを選択
+                      "index": "p",                  # pへのrangeアクセスを選択
                       "rows": 2,
                       "ranges": [
                         "500000000 < Population"
