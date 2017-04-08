@@ -8,7 +8,7 @@ translator: taka-h (@takaidohigasi)
 
 簡単な復習: オプティマイザの役割はたくさんの選択肢の中から最良の実行計画を選択することです。これらの選択肢には、それぞれいくつかの異なるインデックスや、アクセス方法があります。ここまで、われわれは`p(population)`に対する2つの実行計画を見てきました。
 
-1.  `p(population)`に対するレンジスキャン
+1.  `p(population)`に対する範囲スキャン
 2. テーブルスキャン
 
 `p(population)`インデックスは選択性が高くないことがわかったため、`c(continent)`に対して新しいインデックスを追加しようと思います。一般的な本番環境では、`p(population)`インデックスは意味を持たなくなるため削除したくなることでしょう。しかし、オプティマイザが複数の選択肢をうまく評価できたことを確認するためにこれを残すこととします。
@@ -138,12 +138,12 @@ SELECT * FROM Country WHERE continent='Asia' and population > 500000000;
 
 continentへインデックスを追加することで、少なくとも4つも実行計画をとりうるようになりました。
 
-1. `p(population): "500000000 < Population"`へのレンジスキャン
+1. `p(population): "500000000 < Population"`への範囲スキャン
 2. テーブルスキャン
 3. `c(continent)`へのrefによるアクセス
 4. `c(continent): "Asia <= Continent <= Asia"`へのrangeによるアクセス
 
-これらのプランに加え、インデックスマージを使って、`p(population)`と`c(continent)`を両方を使うこともできます。例9の`OPTIMIZER_TRACE`で、`PRIMARY`へのレンジスキャンも検討されてたものの、採用されなかったことがわかります。
+これらのプランに加え、インデックスマージを使って、`p(population)`と`c(continent)`を両方を使うこともできます。例9の`OPTIMIZER_TRACE`で、`PRIMARY`への範囲スキャンも検討されてたものの、採用されなかったことがわかります。
 
 `rows_examined_per_scan`がインデックスの選択性を示していることを説明しましたが、例7と例8の違いを説明するのために有用な2つの他の統計があります。
 
@@ -229,19 +229,19 @@ SELECT * FROM information_schema.optimizer_trace;
                   "potential_range_indexes": [
                     {
                       "index": "PRIMARY",
-                      "usable": false,            # 主キーへのレンジスキャンは
+                      "usable": false,            # 主キーへの範囲スキャンは
                       "cause": "not_applicable"   # 利用できない
                     },
                     {
                       "index": "p",
-                      "usable": true,   # pへのレンジスキャンは利用可能
+                      "usable": true,   # pへの範囲スキャンは利用可能
                       "key_parts": [    # "analyzing_range_alternatives"下で
                         "Population",   # 評価されている
                         "Code"
                       ]
                     },
                     {
-                      "index": "c",     # cへのレンジスキャンは利用可能
+                      "index": "c",     # cへの範囲スキャンは利用可能
                       "usable": true,   # "analyzing_range_alternatives"下で
                       "key_parts": [    # 評価されているが
                         "Continent",    # 高コストと見積もられている
@@ -292,7 +292,7 @@ SELECT * FROM information_schema.optimizer_trace;
                   },
                   "chosen_range_access_summary": {
                     "range_access_plan": {
-                      "type": "range_scan",          # レンジオプティマイザは
+                      "type": "range_scan",          # rangeオプティマイザは
                       "index": "p",                  # pへのrangeアクセスを選択
                       "rows": 2,
                       "ranges": [
