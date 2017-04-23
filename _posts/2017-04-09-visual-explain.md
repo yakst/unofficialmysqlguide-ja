@@ -6,7 +6,7 @@ original_url: http://www.unofficialmysqlguide.com/visual-explain.html
 translator: taka-h (@takaidohigasi)
 ---
 
-MySQL WorkbenchにはExplainが同梱されており、これは複雑な実行計画を人間が読みやすくするものです。内部的にはこの機能は`EXPLAIN FORMAT=JSON`を利用しているため、通常の`EXPLAIN FORMAT=JSON`以上の機能を「もたない」ことを述べておきます。実際のところ、シンプル化するためにカバリングインデックスの利用などのいくつかの出力を省略しています。
+MySQL WorkbenchにはVisual Explainというツールが同梱されており、これは複雑な実行計画を人間にとって読みやすくするものです。内部的にはこの機能は`EXPLAIN FORMAT=JSON`を利用しているため、通常の`EXPLAIN FORMAT=JSON`以上の機能を「もたない」ことを述べておきます。実際のところ、シンプル化するためにカバリングインデックスの利用などのいくつかの出力を省略しています。
 
 Visual Explainの色はアクセスメソッドを示しています。
 
@@ -14,7 +14,7 @@ Visual Explainの色はアクセスメソッドを示しています。
 * `range`はオレンジ
 * `ALL` (テーブルスキャン) と`INDEX` (インデックススキャン)は赤
 
-これまで例の中で見てきたように、選択性の高いrangeアクセスは選択性の低いrefアクセスより望ましく、これは小さなシンプル化かもしれません。
+これまで例の中で見てきたように、選択性の高いrangeアクセスは選択性の低いrefアクセスより望ましく、これはおそらくちょっとした単純化でしょう。
 
 ![explain-c.png](http://www.unofficialmysqlguide.com/_images/explain-c.png)
 
