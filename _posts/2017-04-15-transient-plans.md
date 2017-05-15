@@ -1,19 +1,19 @@
 ---
-title: 一時的な実行計画
+title: 変わりゆく実行計画(Transient Plans)
 date: 2017-04-15 00:00:01 -0900
 article_index: 13
 original_url: http://www.unofficialmysqlguide.com/transient-plans.html
 translator: taka-h (@takaidohigasi)
 ---
 
-同じようにみえるクエリーも全く違った実行計画となることがあります。これまでpopulationの述部を修正することによって確認してきました。例8では、population > `500M(5億)`を指定することで population >`5M(500万)`を指定した場合と異なったインデックスが選択されました。
+同じようにみえるクエリーも全く違った実行計画となることがあります。これまでpopulationの述部を修正することによって確認してきました。例8では、population > `500M`(5億)を指定することで population >`5M`(500万)を指定した場合と異なったインデックスが選択されました。
 
 クエリーの一部がユーザー入力から生成される本番環境では、このようなことはとても良く発生します[^1]。例としては、
 
-* 数カ月分のデータに対して「昨日から現在まで」の範囲の日付を指定した場合、日付の列のインデックスが利用されるでしょう。一方で「昨年から現在まで」を指定した場合はインデックスは利用されないでしょう。
+* 数カ月分のデータに対して「昨日から現在まで」の範囲の日付を指定した場合、おそらく日付の列のインデックスが利用されることでしょう。一方で「昨年から現在まで」を指定した場合はインデックスは利用されないかもしれません。
 * WHERE `is_deleted=1`のレコードを探すには、多くのレコードが除外され、したがってインデックスにとても適しています。同様にWHERE `is_deleted=0`はインデックスには適さないでしょう。
 
-これは予期された挙動で、統計収集(「メタデータと統計」の章で言及済み)の結果です。次の表は、*population*と*continent* が変わった際にインデックスの相対的コストがどの程度変化するかを示しています。
+これは予期された挙動で、[統計収集(「メタデータと統計」の章で言及済み)](https://yakst.github.io/unofficialmysqlguide-ja/cost-based-optimization.html)の結果です。次の表は、*population*と*continent* が変わった際にインデックスの相対的コストがどの程度変化するかを示しています。
 
 |  | **p>5M,c=’Asia’** | **p>5M,c=’Antarctica’** | **p>50M, c=’Asia’** | **p>50M,c=’Antarctica’** | **p>500M, c=’Asia’** | **p>500M,c=’Antarctica’** |
 |:--|:--|:--|:--|:--|:--|:--|
@@ -31,12 +31,12 @@ translator: taka-h (@takaidohigasi)
 
 これは視覚的にも表すことが出来ます。continentへのテーブルスキャンおよびrefアクセスは一定コストであり、(Continent, Population)への複合インデックスがcontinentへのrefアクセスと同一コストで始まり、このときpopulationの選択性は高くありません。populationが大きくなるに連れて選択性が増します。
 
-複合インデックスが効果的でなければ、個々のインデックス(pupulationまたはcontinent)と近いコストになるでしょう。最後に`population > 3M(300万)`の国はすべてアジアにあるため、選択性はpopulationへのインデックスを利用したときとほとんど変わりません。
+複合インデックスが効果的でなければ、個々のインデックス(pupulationまたはcontinent)と近いコストになるでしょう。最後に`population > 3M`(300万)の国はすべてアジアにあるため、選択性はpopulationへのインデックスを利用したときとほとんど変わりません。
 
 
 ![cost-as-afunction-of-p](http://www.unofficialmysqlguide.com/_images/cost-as-a-function-of-p.png)
 
-次の可視化はインデックス`p`を強制的に利用させ、populationを(`WHERE population > 1M(100万)`から`WHERE population > 500M(5億)`まで)変えて100回実行した際の実行時間の中央値を示しています。実行時間は`performance_schema.events_statements_history_long`から取得し、マイクロ秒(μs)に変換しています。データセットが小規模で、人口が少ない国がとても少ないため、同一のページがアクセスされたと思われる実行時間のクラスターがみられるのではないかと思います。
+次の可視化はインデックス`p`を強制的に利用させ、populationを(`WHERE population > 1M`(100万)から`WHERE population > 500M`(5億)まで)変えて100回実行した際の実行時間の中央値を示しています。実行時間は`performance_schema.events_statements_history_long`から取得し、マイクロ秒(μs)に変換しています。データセットが小規模で、人口が少ない国がとても少ないため、同一のページがアクセスされたと思われる実行時間のクラスターがみられるのではないかと思います。
 しかしながらいくらかの相関がみられます。
  ![execution-time-vs-cost](http://www.unofficialmysqlguide.com/_images/execution-time-vs-cost.png)
 
