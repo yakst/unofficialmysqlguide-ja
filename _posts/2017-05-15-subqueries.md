@@ -10,7 +10,7 @@ translator: taka-h (@takaidohigasi)
 
 ## スカラーサブクエリー
 
-スカラーサブクエリーは、サブクエリーがきっかり1行を返すもので、実行の際には最適化により除去しキャッシュすることが出来ます。例13で、Torontoの`CountryCode`を取得するスカラーサブクエリーの例を示しています。オプティマイザーがこれを2つのクエリーとみなしているのは重要で、それぞれコストが1.00および4213.00となっています。
+スカラーサブクエリーとは、サブクエリーのうちきっかり1行を返すもののことです。スカラーサブクエリーは、実行の最中に最適化により除去することができ、結果がキャッシュされます。例13で、Torontoの`CountryCode`を取得するスカラーサブクエリーの例を示しています。オプティマイザーがこれを2つのクエリーとみなしているのは重要で、それぞれコストが1.00および4213.00となっています(訳注: コストの値は修正もれで1.20および862.60と思われます)。
 
 ![explain-scalar](http://www.unofficialmysqlguide.com/_images/explain-scalar.png)
 
@@ -210,7 +210,7 @@ SELECT * FROM Country WHERE Code = (SELECT CountryCode FROM City WHERE name='Tor
 1 row in set (0.00 sec)
 ```
 
-このサブクエリーは少し効率的です。Countryテーブルに最初にアクセス(カバリングインデックスを利用し、インデックスオンリースキャンを利用)し、一致した各行に対して一連の行がCityテーブル内を`c(CountryCode)`インデックスを利用して参照されます。
+このサブクエリーはまずまず効率的です。Countryテーブルに最初にアクセス(カバリングインデックスを利用し、インデックスオンリースキャンを利用)し、一致した各行に対して一連の行がCityテーブル内を`c(CountryCode)`インデックスを利用して参照されます。
 
 ![explain-example-15](http://www.unofficialmysqlguide.com/_images/explain-example-15.png)
 
