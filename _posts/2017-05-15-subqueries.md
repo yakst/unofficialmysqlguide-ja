@@ -300,7 +300,7 @@ SELECT * FROM City WHERE CountryCode IN (SELECT Code FROM Country WHERE Continen
 
 例15では、サブクエリーは一意で重複がない(ユニークな)行セットを返すため`INNER JOIN`に書き換えられていました。サブクエリーがユニークではないとき、MySQLのオプティマイザーは別の戦略を選択します。
 
-例16では、少なくとも1つ公用語を持つ国を検索しようとしています。幾つかの国では複数の公用語があるため、サブクエリーの結果はユニークにはなりません。
+例16では、少なくとも1つ公用語を持つ国を検索しようとしています。いくつかの国では複数の公用語があるため、サブクエリーの結果はユニークにはなりません。
 
 ![explain-example-16](http://www.unofficialmysqlguide.com/_images/explain-example-16.png)
 
