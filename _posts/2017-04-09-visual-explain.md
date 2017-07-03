@@ -6,7 +6,7 @@ original_url: http://www.unofficialmysqlguide.com/visual-explain.html
 translator: taka-h (@takaidohigasi)
 ---
 
-MySQL WorkbenchにはVisual Explainというツールが同梱されており、これは複雑な実行計画を人間にとって読みやすくするものです。内部的にはこの機能は`EXPLAIN FORMAT=JSON`を利用しているため、通常の`EXPLAIN FORMAT=JSON`以上の機能を「もたない」ことを述べておきます。実際のところ、シンプル化するためにカバリングインデックスの利用などのいくつかの出力を省略しています。
+MySQL WorkbenchにはVisual Explainというツールが同梱されており、これは複雑な実行計画を人間にとって読みやすくするものです。この機能は`EXPLAIN FORMAT=JSON`を内部的に利用しているため、通常の`EXPLAIN FORMAT=JSON`以上の機能を「もたない」ことを述べておきます。実際のところ、シンプル化するためにカバリングインデックスの利用などのいくつかの出力を省略しています。
 
 Visual Explainの色はアクセスメソッドを示しています。
 
