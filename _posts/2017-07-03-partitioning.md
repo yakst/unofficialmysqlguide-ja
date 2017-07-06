@@ -81,6 +81,6 @@ SELECT * FROM CountryLanguage WHERE isOfficial='T' AND CountryCode='CAN';
 }
 ```
 
-{% include info.html info="MySQLはパーティションプルーニングにくわえて、選択されたパーティションのみを明示的に指定する構文をサポートしています。これは次のようにアプリケーションからクエリーヒントと似たように使うすることができます。SELECT * FROM CountryLanguage PARTITION (pOfficial) WHERE CountryCode='CAN'; " %}
+{% include info.html info="MySQLはパーティションプルーニングにくわえて、選択されたパーティションのみを明示的に指定する構文をサポートしています。これは次のようにアプリケーションからクエリーヒントと似たように利用することができます。SELECT * FROM CountryLanguage PARTITION (pOfficial) WHERE CountryCode='CAN'; " %}
 
 [^1]: データウェアハウスにおいて、これはslowly changing dimensionsと呼ばれます。[https://en.wikipedia.org/wiki/Slowly_changing_dimension](https://en.wikipedia.org/wiki/Slowly_changing_dimension)
